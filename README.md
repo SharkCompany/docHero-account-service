@@ -1,1 +1,0 @@
-# docHero-account-service
