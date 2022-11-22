@@ -1,0 +1,23 @@
+
+spring:
+  application:
+    name: "account-service"
+  jpa:
+    generate-ddl: "true"
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:postgresql://103.142.137.207:12345/docHero-account-db
+    password: "123456"
+    username: root
+  output:
+    ansi:
+      enabled: always
+server:
+  error:
+    include-stacktrace: never
+  port: "8082"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://103.142.137.207:3000/eureka
