@@ -23,6 +23,18 @@ public class ApplicationExceptionHandler {
     return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
   }
 
+
+  @ExceptionHandler({
+      AccountNotFoundException.class})
+  public ResponseEntity<Object> NotFoundExceptionHandler(RuntimeException exception, WebRequest request) {
+    Map<String, Object> responseBody = new HashMap<>();
+    responseBody.put("timestamp", LocalDateTime.now());
+    responseBody.put("message", exception.getMessage());
+    responseBody.put("statusCode", HttpStatus.NOT_FOUND);
+    responseBody.put("cause", exception.getCause());
+    return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+  }
+
   @ExceptionHandler({
       ValidationException.class})
   public ResponseEntity<Object> InvalidRequest(ValidationException exception, WebRequest request) {
