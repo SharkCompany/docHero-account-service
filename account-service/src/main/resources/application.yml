@@ -5,7 +5,7 @@ spring:
   jpa:
     generate-ddl: "true"
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     url: jdbc:postgresql://103.142.137.207:12345/docHero-account-db
     password: "123456"
@@ -20,4 +20,5 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://45.119.84.194:25031/eureka
+      defaultZone: http://localhost:8761/eureka
+#      defaultZone: http://103.48.192.223:24120/eureka
