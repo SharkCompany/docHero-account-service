@@ -12,7 +12,6 @@ public class NotEmptyStringValidator implements ConstraintValidator<NotEmptyStri
 
   @Override
   public boolean isValid(String objects, ConstraintValidatorContext context) {
-//    if (Objects.isNull(objects)) return false;
     return !Objects.isNull(objects) && !objects.isEmpty();
   }
 }

@@ -9,9 +9,9 @@ import javax.validation.Payload;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NotEmptyStringValidator.class)
-public @interface NotEmptyString {
-  String message() default "String can not be empty";
+@Constraint(validatedBy = UniqueEmailValidator.class)
+public @interface UniqueEmail {
+  String message() default "Email already exists";
 
   Class<?>[] groups() default {};
 

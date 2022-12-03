@@ -1,9 +1,9 @@
 package com.dochero.accountservice.service;
 
 import com.dochero.accountservice.domain.Account;
+import com.dochero.accountservice.repository.AccountRepository;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
-import com.dochero.accountservice.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class AccountService {
 
   final AccountRepository accountRepository;
+
 
   public CreateAccountResponseDTO register(CreateAccountDTO account) {
     Account accountToCreate = Account.builder()
@@ -22,7 +23,8 @@ public class AccountService {
         .build();
     accountToCreate.setEmail(account.getEmail());
     Account newAccount = accountRepository.save(accountToCreate);
-    return CreateAccountResponseDTO.builder().id(newAccount.getId()).fullname(newAccount.getFullname())
+    return CreateAccountResponseDTO.builder().id(newAccount.getId())
+        .fullname(newAccount.getFullname())
         .email(newAccount.getEmail()).department_id(newAccount.getDepartment_id()).build();
   }
 }

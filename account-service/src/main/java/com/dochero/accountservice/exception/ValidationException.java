@@ -13,7 +13,6 @@ public class ValidationException extends RuntimeException {
   public ValidationException(BindingResult errors) {
     this.errors = errors;
   }
-
   public List<String> getListDefaultMessages() {
     return getDefaultMessages(this.errors);
   }
