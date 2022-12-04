@@ -3,8 +3,6 @@ services:
   dochero_account_service:
     image: phongvanngo/dochero-account-service
     container_name: docHero_account_service
-    depends_on:
-      - mysql
     environment:
       - SPRING_DATASOURCE_URL=${ACCOUNT_SERVICE_DB_URI}
       - SPRING_DATASOURCE_PASSWORD=${ACCOUNT_SERVICE_DB_PASSWORD}
