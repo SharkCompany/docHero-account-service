@@ -56,8 +56,8 @@ public class AccountController {
 
   @DeleteMapping("/account/{id}")
   public ResponseEntity<String> deleteAccount(
-     @PathVariable String id) {
+      @PathVariable String id) {
     accountService.deleteAccount(id);
-    return new ResponseEntity<>("Delete Successfully" , HttpStatus.OK);
+    return new ResponseEntity<>("Delete Successfully", HttpStatus.OK);
   }
 }

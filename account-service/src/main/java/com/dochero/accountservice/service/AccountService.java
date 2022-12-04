@@ -77,10 +77,9 @@ public class AccountService {
         .department_id(account.getDepartment_id()).fullname(
             account.getFullname()).email(account.getEmail()).build();
   }
-  
+
   public void deleteAccount(String id) {
-    Account account = findAccountById(id);
+    findAccountById(id);
     accountRepository.deleteById(id);
-    return;
   }
 }
