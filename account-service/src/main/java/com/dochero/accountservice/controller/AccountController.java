@@ -6,6 +6,11 @@ import com.dochero.accountservice.service.dto.account.AccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +48,13 @@ public class AccountController {
     }
   }
 
+  @Operation(summary = "Create An Account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Create Successfully",
+          content = { @Content(mediaType = "application/json",
+              schema = @Schema(implementation = AccountResponseDTO.class)) }),
+      @ApiResponse(responseCode = "400", description = "Invalid Input Fields",
+          content = {@Content})})
   @GetMapping("/accounts")
   public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
     return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
