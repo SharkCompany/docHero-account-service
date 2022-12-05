@@ -35,8 +35,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run:
-        sh ./mvnw clean -DskipTests=true package;
         cd account-service;
+        sh ./mvnw clean -DskipTests=true package;
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
         docker push phongvanngo/dochero-account-service:latest;
