@@ -32,9 +32,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build the Docker image
     - uses: actions/checkout@v3
-    - run:
+    - name: Build the Docker image
+      run:
         cd account-service
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version
