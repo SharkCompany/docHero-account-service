@@ -37,7 +37,7 @@ jobs:
       run:
         cd account-service;
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service:latest;
-        docker tag phongvanngo/dochero-account-servicey:latestphongvanngo/dochero-account-service:$version;
+        docker tag phongvanngo/dochero-account-servicey:latest phongvanngo/dochero-account-service:$version;
         
     - name: Push Docker Image
       run:
