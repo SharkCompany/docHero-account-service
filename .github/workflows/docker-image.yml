@@ -20,8 +20,8 @@ jobs:
   check-variable:
     runs-on: ubuntu-latest
     steps:
-      - name: Log variables
       - uses: actions/checkout@v3
+      - name: Log variables
       - run: echo $version
       - run: echo ${COMMIT_SHA};
       
