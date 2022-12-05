@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
     
 env:
-  version: $(git rev-parse --short ${{ github.sha }})
+  version: ${{ github.sha }}
   dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
   dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
   server_host: ${{ secrets.SERVER_HOST }}
@@ -24,8 +24,6 @@ jobs:
       - name: Log variables
         run:
           echo $version;
-          calculatedSha=$(git rev-parse --short ${{ github.sha }});
-          echo "::set-output name=short_sha::$calculatedSha";
       
 
   login:
