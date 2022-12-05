@@ -24,6 +24,7 @@ jobs:
       - name: Log variables
         run:
           echo $version;
+          echo $dockerhub_username;
       
 
   login:
