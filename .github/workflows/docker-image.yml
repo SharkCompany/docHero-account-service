@@ -1,0 +1,53 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+env:
+  version: $(git rev-parse --short "$GITHUB_SHA")
+  dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+  dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  server_host: ${{ secrets.SERVER_HOST }}
+  server_username: ${{ secrets.SERVER_USERNAME }}
+  server_password: ${{ secrets.SERVER_PASSWORD }}
+  
+
+jobs:
+
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+      - uses: docker/login-action@v2
+      - with:
+          username: $dockerhub_username
+          password: $dockerhub_password
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+    - run:
+        cd account-service
+        docker build . --file Dockerfile --tag phongvanngo/dochero-account-service
+        docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version
+        docker push phongvanngo/dochero-account-service:latest
+        docker push phongvanngo/dochero-account-service:$version
+  
+      
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: $server_host
+        username: $server_username
+        password: $server_password
+        script: whoami
