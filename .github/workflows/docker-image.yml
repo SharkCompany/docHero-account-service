@@ -33,9 +33,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Login To Dockerhub
       run:
-        docker login \
-        --username=${dockerhub_username} \
-        --password=${dockerhub_password} 
+        docker login --username=${dockerhub_username} --password=${dockerhub_password} 
 
 
   build:
@@ -43,14 +41,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
-    - 
-      name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: $dockerhub_username
-        password: $dockerhub_password
-        
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run:
