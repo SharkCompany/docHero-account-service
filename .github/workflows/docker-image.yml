@@ -63,4 +63,4 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        script: whoami
+        script: cd /home/novapo/docker-compose-list/dochero/;git pull;docker-compose pull;docker-compose up -d account-service;
