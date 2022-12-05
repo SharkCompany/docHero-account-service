@@ -30,12 +30,13 @@ jobs:
   login:
     runs-on: ubuntu-latest
     steps:
-      - 
-        name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: $dockerhub_username
-          password: $dockerhub_password
+    - uses: actions/checkout@v3
+    - name: Login To Dockerhub
+      run:
+        docker login \
+        --username=${dockerhub_username} \
+        --password=${dockerhub_password} 
+
 
   build:
 
@@ -59,6 +60,7 @@ jobs:
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
         docker push phongvanngo/dochero-account-service:latest;
         docker images;
+        docker login --username=${dockerhub_username} --password=${dockerhub_password};
         docker push phongvanngo/dochero-account-service:$version;
         
   
