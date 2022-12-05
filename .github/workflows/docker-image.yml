@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
     
 env:
-  version: ${COMMIT_SHA}
+  version: ${{ github.head_ref }}.${{ github.sha }}
   dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
   dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
   server_host: ${{ secrets.SERVER_HOST }}
@@ -24,7 +24,6 @@ jobs:
       - name: Log variables
         run: |
           echo $version
-          echo ${COMMIT_SHA}
       
 
   login:
