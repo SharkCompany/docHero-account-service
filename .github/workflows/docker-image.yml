@@ -22,8 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Log variables
-      - run: echo $version
-      - run: echo ${COMMIT_SHA};
+        run: |
+          echo $version
+          echo ${COMMIT_SHA}
       
 
   login:
@@ -43,11 +44,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-    - run: cd account-service;
-    - run : docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
-    - run: docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
-    - run: docker push phongvanngo/dochero-account-service:latest;
-    - run: docker push phongvanngo/dochero-account-service:$version;
+      run:
+        cd account-service;
+        docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
+        docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
+        docker push phongvanngo/dochero-account-service:latest;
+        docker push phongvanngo/dochero-account-service:$version;
   
       
   deploy:
