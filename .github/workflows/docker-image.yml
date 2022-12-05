@@ -8,8 +8,8 @@ on:
     
 env:
   version: ${{ github.sha }}
-  dockerhub_username: phongvanngo
-  dockerhub_password: novapo2412
+  dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+  dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
   server_host: ${{ secrets.SERVER_HOST }}
   server_username: ${{ secrets.SERVER_USERNAME }}
   server_password: ${{ secrets.SERVER_PASSWORD }}
