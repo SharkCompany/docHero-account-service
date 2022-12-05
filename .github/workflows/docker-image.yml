@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
-      - uses: docker/login-action@v2
-      - with:
+        uses: docker/login-action@v2
+        with:
           username: $dockerhub_username
           password: $dockerhub_password
 
@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Build the Docker image
+    - uses: actions/checkout@v3
     - run:
         cd account-service
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service
@@ -45,8 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-    - uses: appleboy/ssh-action@master
-    - with:
+      uses: appleboy/ssh-action@master
+      with:
         host: $server_host
         username: $server_username
         password: $server_password
