@@ -1,0 +1,27 @@
+
+spring:
+  application:
+    name: "account-service"
+  jpa:
+    generate-ddl: "true"
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://103.142.137.207:12345/docHero-account-db
+    password: "123456"
+    username: root
+  output:
+    ansi:
+      enabled: always
+server:
+  error:
+    include-stacktrace: never
+  port: "8082"
+eureka:
+  client:
+    service-url:
+#      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://45.119.84.194:40000/eureka
+springdoc:
+  swagger-ui:
+    path: /api-docs
