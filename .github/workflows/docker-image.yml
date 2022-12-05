@@ -36,7 +36,6 @@ jobs:
     - name: Build the Docker image
       run:
         cd account-service;
-        sh ./mvnw clean -DskipTests=true package;
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
         docker push phongvanngo/dochero-account-service:latest;
