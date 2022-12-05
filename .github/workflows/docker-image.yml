@@ -8,8 +8,8 @@ on:
     
 env:
   version: ${{ github.sha }}
-  dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
-  dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  dockerhub_username: phongvanngo
+  dockerhub_password: novapo2412
   server_host: ${{ secrets.SERVER_HOST }}
   server_username: ${{ secrets.SERVER_USERNAME }}
   server_password: ${{ secrets.SERVER_PASSWORD }}
@@ -48,7 +48,9 @@ jobs:
         docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
         docker push phongvanngo/dochero-account-service:latest;
+        docker images;
         docker push phongvanngo/dochero-account-service:$version;
+        
   
       
   deploy:
