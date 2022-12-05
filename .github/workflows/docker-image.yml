@@ -17,6 +17,15 @@ env:
 
 jobs:
 
+  check-variable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log variables
+        run:
+          echo $version
+      
+
   login:
     runs-on: ubuntu-latest
     steps:
