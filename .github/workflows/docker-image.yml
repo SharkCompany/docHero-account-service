@@ -46,13 +46,12 @@ jobs:
       run:
         echo $dockerhub_username;
         cd account-service;
-        docker build . --file Dockerfile --tag phongvanngo/dochero-account-service;
+        docker build . --file Dockerfile --tag phongvanngo/dochero-account-service:latest;
         docker tag phongvanngo/dochero-account-service:latest phongvanngo/dochero-account-service:$version;
         docker images;
         docker login --username=${dockerhub_username} --password=${dockerhub_password};
         docker push phongvanngo/dochero-account-service:$version;
-        
-  
+        docker push phongvanngo/dochero-account-service:latest;
       
   deploy:
     runs-on: ubuntu-latest
