@@ -32,6 +32,9 @@ public class Account {
     private String password;
 
     @Column(name="department_id")
-    private String department_id;
+    private String departmentId;
+
+    @Column(name="role_name")
+    private String roleName;
 
 }

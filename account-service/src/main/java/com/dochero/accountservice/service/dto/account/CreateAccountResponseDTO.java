@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateAccountResponseDTO {
     private String id;
-    private String fullname;
+    private String fullName;
     private String email;
-    private String department_id;
+    private String departmentId;
+    private String roleName;
 }

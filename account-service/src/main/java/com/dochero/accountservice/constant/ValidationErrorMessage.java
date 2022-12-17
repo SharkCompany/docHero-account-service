@@ -7,4 +7,6 @@ public interface ValidationErrorMessage {
    String INVALID_EMAIL = "Invalid Email";
    String ACCOUNT_NOT_FOUND = "Account Not Found";
 
+   String EMPTY_ROLE = "roleName cannot by empty";
+
 }

@@ -26,14 +26,16 @@ public class AccountService {
     Account accountToCreate = Account.builder()
         .email(account.getEmail())
         .password(account.getPassword())
-        .fullname(account.getFullname())
-        .department_id(account.getDepartment_id())
+        .fullname(account.getFullName())
+        .departmentId(account.getDepartmentId())
+        .roleName(account.getRoleName())
         .build();
     accountToCreate.setEmail(account.getEmail());
     Account newAccount = accountRepository.save(accountToCreate);
     return CreateAccountResponseDTO.builder().id(newAccount.getId())
-        .fullname(newAccount.getFullname())
-        .email(newAccount.getEmail()).department_id(newAccount.getDepartment_id()).build();
+        .roleName(newAccount.getRoleName())
+        .fullName(newAccount.getFullname())
+        .email(newAccount.getEmail()).departmentId(newAccount.getDepartmentId()).build();
   }
 
 
@@ -46,9 +48,10 @@ public class AccountService {
           AccountResponseDTO
               .builder()
               .id(account.getId())
-              .fullname(account.getFullname())
-              .department_id(account.getDepartment_id())
+              .fullName(account.getFullname())
+              .departmentId(account.getDepartmentId())
               .email(account.getEmail())
+              .roleName(account.getRoleName())
               .build());
     }
     return accountResponseDTOS;
@@ -63,19 +66,22 @@ public class AccountService {
   public AccountResponseDTO updateAccount(String id, UpdateAccountDTO accountDTO) {
     Account account = findAccountById(id);
 
-    if (!Objects.isNull(accountDTO.getDepartment_id())) {
-      account.setDepartment_id(accountDTO.getDepartment_id());
+    if (!Objects.isNull(accountDTO.getDepartmentId())) {
+      account.setDepartmentId(accountDTO.getDepartmentId());
     }
 
-    if (!Objects.isNull(accountDTO.getFullname())) {
-      account.setFullname(accountDTO.getFullname());
+    if (!Objects.isNull(accountDTO.getFullName())) {
+      account.setFullname(accountDTO.getFullName());
     }
 
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())
-        .department_id(account.getDepartment_id()).fullname(
-            account.getFullname()).email(account.getEmail()).build();
+        .departmentId(account.getDepartmentId())
+        .fullName(account.getFullname())
+        .email(account.getEmail())
+        .roleName(account.getRoleName())
+        .build();
   }
 
   public void deleteAccount(String id) {

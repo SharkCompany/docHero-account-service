@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Builder
 @Data
@@ -12,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class AccountResponseDTO {
   public String id;
-  public String fullname;
+  public String fullName;
   public String email;
-  public String department_id;
+  public String departmentId;
+  public String roleName;
 }
