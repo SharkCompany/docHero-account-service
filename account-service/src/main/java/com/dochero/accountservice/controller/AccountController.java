@@ -38,7 +38,7 @@ public class AccountController {
 
   @GetMapping("/ping")
   public String helloWorld() {
-    return "hello world from local";
+    return "hello world from account service";
   }
 
   @PostMapping("/register")
@@ -73,9 +73,9 @@ public class AccountController {
               schema = @Schema(implementation = Object.class))
           }),
   })
-  @GetMapping("/validate")
+  @PostMapping("/validate")
   public ResponseEntity<AccountResponseDTO> findAccountByEmailAndPassword(
-      @Valid ValidateAccountDTO accountAuthPayload,
+      @Valid @RequestBody ValidateAccountDTO accountAuthPayload,
       BindingResult errors
   ) {
     if (errors.hasErrors()) throw new ValidationException(errors);

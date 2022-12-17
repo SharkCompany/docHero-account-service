@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class CheckConnectionController {
 
-  @Operation(summary = "Ping To Service")
+  @Operation(summary = "Ping To Account Service")
   @GetMapping("/")
   public String homepage() {
     return "Welcome To Account Service";

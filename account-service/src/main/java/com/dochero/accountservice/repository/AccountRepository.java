@@ -1,10 +1,11 @@
 package com.dochero.accountservice.repository;
 
 import com.dochero.accountservice.domain.Account;
+import com.dochero.accountservice.repository.CustomRepository.MyRepository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AccountRepository extends JpaRepository<Account,Long> {
+public interface AccountRepository extends JpaRepository<Account,Long>, MyRepository {
   public Optional<Account> findByEmail(String email);
   public Optional<Account> findById(String id);
 
