@@ -1,5 +1,6 @@
 package com.dochero.accountservice.service.dto.account;
 
+import com.dochero.accountservice.validation.custom_validation.NotEmptyString;
 import com.dochero.accountservice.validation.custom_validation.RoleConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccountDTO {
+
   private String fullName;
   private String departmentId;
 

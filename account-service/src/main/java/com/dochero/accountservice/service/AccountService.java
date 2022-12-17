@@ -74,6 +74,10 @@ public class AccountService {
       account.setFullname(accountDTO.getFullName());
     }
 
+    if (!Objects.isNull(accountDTO.getRoleName())) {
+      account.setRoleName(accountDTO.getRoleName());
+    }
+
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())

@@ -48,13 +48,12 @@ public class AccountController {
     }
   }
 
-  @Operation(summary = "Create An Account")
+  @Operation(summary = "Get Accounts")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Create Successfully",
-          content = { @Content(mediaType = "application/json",
-              schema = @Schema(implementation = AccountResponseDTO.class)) }),
-      @ApiResponse(responseCode = "400", description = "Invalid Input Fields",
-          content = {@Content})})
+      @ApiResponse(responseCode = "200", description = "Successfully",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AccountResponseDTO.class))}),
+  })
   @GetMapping("/accounts")
   public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
     return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
@@ -62,7 +61,12 @@ public class AccountController {
 
   @PutMapping("/account/{id}")
   public ResponseEntity<AccountResponseDTO> updateAccount(
-      @RequestBody @Valid UpdateAccountDTO updateAccountDTO, @PathVariable String id) {
+      @RequestBody @Valid UpdateAccountDTO updateAccountDTO,
+      @PathVariable String id,
+      BindingResult errors) {
+    if (errors.hasErrors()) {
+      throw new ValidationException(errors);
+    }
     return new ResponseEntity<>(accountService.updateAccount(id, updateAccountDTO), HttpStatus.OK);
   }
 
