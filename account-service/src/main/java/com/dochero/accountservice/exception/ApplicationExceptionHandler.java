@@ -39,6 +39,18 @@ public class ApplicationExceptionHandler {
   }
 
   @ExceptionHandler({
+      WrongPasswordException.class})
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ResponseEntity<Object> handleWrongPasswordException(WrongPasswordException exception) {
+    var responseBody = ErrorResponseSchema.builder()
+        .timestamp(LocalDateTime.now())
+        .messages(exception.getMessage())
+        .statusCode(HttpStatus.UNAUTHORIZED)
+        .build();
+    return new ResponseEntity<>(responseBody, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler({
       ValidationException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Object> InvalidRequest(ValidationException exception, WebRequest request) {

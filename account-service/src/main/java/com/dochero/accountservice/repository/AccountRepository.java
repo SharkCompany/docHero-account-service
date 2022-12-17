@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AccountRepository extends JpaRepository<Account,Long> {
   public Optional<Account> findByEmail(String email);
   public Optional<Account> findById(String id);
+
+  public Optional<Account> findByEmailAndPassword(String email, String password);
   public void deleteById(String id);
 }
