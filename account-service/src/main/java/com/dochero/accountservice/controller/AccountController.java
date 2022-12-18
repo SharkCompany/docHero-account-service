@@ -8,14 +8,13 @@ import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
 import com.dochero.accountservice.service.dto.account.ValidateAccountDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
-import javax.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class AccountController {
 
@@ -63,8 +61,8 @@ public class AccountController {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successfully",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = List.class))
-      }),
+              array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
+          }),
   })
   @GetMapping("/accounts")
   public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
@@ -86,8 +84,11 @@ public class AccountController {
       @Valid @RequestBody ValidateAccountDTO accountAuthPayload,
       BindingResult errors
   ) {
-    if (errors.hasErrors()) throw new ValidationException(errors);
-    return new ResponseEntity<>(accountService.getAccountByEmailAndPassword(accountAuthPayload), HttpStatus.OK);
+    if (errors.hasErrors()) {
+      throw new ValidationException(errors);
+    }
+    return new ResponseEntity<>(accountService.getAccountByEmailAndPassword(accountAuthPayload),
+        HttpStatus.OK);
   }
 
   @PutMapping("/account/{id}")
@@ -100,7 +101,6 @@ public class AccountController {
     }
     return new ResponseEntity<>(accountService.updateAccount(id, updateAccountDTO), HttpStatus.OK);
   }
-
 
 
   @DeleteMapping("/account/{id}")
