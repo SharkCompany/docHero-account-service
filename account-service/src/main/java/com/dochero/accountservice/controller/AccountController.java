@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.ws.rs.PathParam;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountController {
 
@@ -41,7 +42,14 @@ public class AccountController {
     return "hello world from account service";
   }
 
-  @PostMapping("/register")
+  @Operation(summary = "Create Account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Successfully",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AccountResponseDTO.class))
+          }),
+  })
+  @PostMapping("/account/create")
   public ResponseEntity<CreateAccountResponseDTO> register(
       @RequestBody @Valid CreateAccountDTO account, BindingResult validationErrors) {
     if (validationErrors.hasErrors()) {
@@ -51,11 +59,11 @@ public class AccountController {
     }
   }
 
-  @Operation(summary = "Get Accounts")
+  @Operation(summary = "Get List of Accounts")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successfully",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AccountResponseDTO.class))
+              schema = @Schema(implementation = List.class))
       }),
   })
   @GetMapping("/accounts")
