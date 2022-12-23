@@ -27,3 +27,9 @@ eureka:
 springdoc:
   swagger-ui:
     path: /api-docs
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
