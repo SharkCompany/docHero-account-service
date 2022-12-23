@@ -4,7 +4,9 @@ import com.dochero.accountservice.constant.ValidationErrorMessage;
 import com.dochero.accountservice.validation.custom_validation.NotEmptyString;
 import com.dochero.accountservice.validation.custom_validation.RoleConstraint;
 import com.dochero.accountservice.validation.custom_validation.UniqueEmail;
+import java.util.List;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +27,8 @@ public class CreateAccountDTO {
   @UniqueEmail(message = "The email ${validatedValue} already exists")
   private String email;
 
-  private String departmentId;
+  @NotNull(message = "departmentIDs must not be empty")
+  private List<String> departmentIDs;
 
   @RoleConstraint
   @NotEmptyString(message = ValidationErrorMessage.EMPTY_ROLE)

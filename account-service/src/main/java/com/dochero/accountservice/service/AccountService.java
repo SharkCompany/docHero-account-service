@@ -1,9 +1,12 @@
 package com.dochero.accountservice.service;
 
-import com.dochero.accountservice.constant.ValidationErrorMessage;
 import com.dochero.accountservice.domain.Account;
+import com.dochero.accountservice.domain.AccountDepartment;
 import com.dochero.accountservice.exception.AccountNotFoundException;
+import com.dochero.accountservice.exception.DepartmentNotFoundException;
 import com.dochero.accountservice.exception.WrongPasswordException;
+import com.dochero.accountservice.openfeign.DepartmentServiceFeignClient;
+import com.dochero.accountservice.repository.AccountDepartmentRepository;
 import com.dochero.accountservice.repository.AccountRepository;
 import com.dochero.accountservice.service.dto.account.AccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,22 +30,48 @@ public class AccountService {
 
   final AccountRepository accountRepository;
 
+  final AccountDepartmentRepository accountDepartmentRepository;
+
   final PasswordEncoder passwordEncoder;
+
+  final DepartmentServiceFeignClient departmentServiceFeignClient;
 
   public CreateAccountResponseDTO register(CreateAccountDTO account) {
     Account accountToCreate = Account.builder()
         .email(account.getEmail())
         .password(passwordEncoder.encode(account.getPassword()))
         .fullname(account.getFullName())
-        .departmentId(account.getDepartmentId())
         .roleName(account.getRoleName())
         .build();
     accountToCreate.setEmail(account.getEmail());
+
+    List<String> departmentIDs = account.getDepartmentIDs();
+    List<AccountDepartment> accountDepartments = new ArrayList<>();
     Account newAccount = accountRepository.save(accountToCreate);
+
+    accountDepartmentRepository.saveAll(accountDepartments);
+
+    for (String departmentID : departmentIDs) {
+      try {
+        var res = departmentServiceFeignClient.getById(departmentID);
+        if (Objects.nonNull(res.getData())) {
+          accountDepartments.add(new AccountDepartment(newAccount.getId(), departmentID));
+        }
+      } catch (Exception ex) {
+        throw new DepartmentNotFoundException(
+            String.format("Department with id = %s is not found. Error: %s", departmentID,
+                ex));
+      }
+    }
+
+    accountDepartmentRepository.saveAll(accountDepartments);
+
     return CreateAccountResponseDTO.builder().id(newAccount.getId())
         .roleName(newAccount.getRoleName())
         .fullName(newAccount.getFullname())
-        .email(newAccount.getEmail()).departmentId(newAccount.getDepartmentId()).build();
+        .departmentIDs(accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(
+            Collectors.toList()))
+        .email(newAccount.getEmail()).build();
   }
 
 
@@ -55,7 +85,7 @@ public class AccountService {
               .builder()
               .id(account.getId())
               .fullName(account.getFullname())
-              .departmentId(account.getDepartmentId())
+//              .departmentIDs(account.getDepartmentIDs())
               .email(account.getEmail())
               .roleName(account.getRoleName())
               .build());
@@ -71,15 +101,16 @@ public class AccountService {
 
     String hashedPassword = accountOptional.get().getPassword();
 
-    if (!passwordEncoder.matches(validateAccountDTO.getPassword(),hashedPassword))
+    if (!passwordEncoder.matches(validateAccountDTO.getPassword(), hashedPassword)) {
       throw new WrongPasswordException();
+    }
 
     Account account = accountOptional.get();
     return AccountResponseDTO
         .builder()
         .id(account.getId())
         .fullName(account.getFullname())
-        .departmentId(account.getDepartmentId())
+//        .departmentIDs(account.getDepartmentIDs())
         .email(account.getEmail())
         .roleName(account.getRoleName())
         .build();
@@ -95,7 +126,7 @@ public class AccountService {
     Account account = findAccountById(id);
 
     if (!Objects.isNull(accountDTO.getDepartmentId())) {
-      account.setDepartmentId(accountDTO.getDepartmentId());
+//      account.setDepartmentIDs(accountDTO.getDepartmentId());
     }
 
     if (!Objects.isNull(accountDTO.getFullName())) {
@@ -109,7 +140,7 @@ public class AccountService {
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())
-        .departmentId(account.getDepartmentId())
+//        .departmentIDs(account.getDepartmentIDs())
         .fullName(account.getFullname())
         .email(account.getEmail())
         .roleName(account.getRoleName())

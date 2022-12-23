@@ -1,5 +1,6 @@
 package com.dochero.accountservice.domain;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,9 +31,6 @@ public class Account {
 
     @Column(name="password")
     private String password;
-
-    @Column(name="department_id")
-    private String departmentId;
 
     @Column(name="role_name")
     private String roleName;

@@ -1,5 +1,6 @@
 package com.dochero.accountservice.service.dto.account;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,6 @@ public class AccountResponseDTO {
   public String id;
   public String fullName;
   public String email;
-  public String departmentId;
+  public List<String> departmentIDs;
   public String roleName;
 }

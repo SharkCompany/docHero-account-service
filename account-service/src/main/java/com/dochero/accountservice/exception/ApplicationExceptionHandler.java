@@ -73,4 +73,18 @@ public class ApplicationExceptionHandler {
         .build();
     return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
   }
+
+  @ExceptionHandler({
+      DepartmentNotFoundException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleDepartmentNotFoundException(DepartmentNotFoundException exception, WebRequest request) {
+    var responseBody = ErrorResponseSchema.builder()
+        .timestamp(LocalDateTime.now())
+        .messages(exception.getMessage())
+        .statusCode(HttpStatus.BAD_REQUEST)
+        .build();
+    return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+  }
+
+
 }
