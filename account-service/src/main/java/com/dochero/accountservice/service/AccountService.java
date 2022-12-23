@@ -74,6 +74,25 @@ public class AccountService {
         .email(newAccount.getEmail()).build();
   }
 
+  public AccountResponseDTO getAccountById(String userId) {
+    Optional<Account> accountOptional = accountRepository.findById(userId);
+    if (accountOptional.isEmpty()) {
+      throw new AccountNotFoundException();
+    }
+
+    Account account = accountOptional.get();
+
+    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
+        userId);
+    return AccountResponseDTO.builder()
+        .id(account.getId())
+        .email(account.getEmail())
+        .roleName(account.getRoleName())
+        .departmentIDs(accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(
+            Collectors.toList()))
+        .fullName(account.getFullname())
+        .build();
+  }
 
   public List<AccountResponseDTO> getAccounts() {
     List<Account> accounts = accountRepository.findAll();
@@ -153,8 +172,10 @@ public class AccountService {
   }
 
   public List<String> getUserDepartmentIDs(String userId) {
-     List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(userId);
-     return accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(Collectors.toList());
+    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
+        userId);
+    return accountDepartments.stream().map(AccountDepartment::getDepartmentId)
+        .collect(Collectors.toList());
   }
 
 }
