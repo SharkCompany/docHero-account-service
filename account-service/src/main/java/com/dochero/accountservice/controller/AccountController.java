@@ -69,13 +69,8 @@ public class AccountController {
     return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
   }
 
-  @Operation(summary = "Get Account By Id")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AccountResponseDTO.class))}),
-  })
-  @GetMapping("/account/{userId}")
+
+  @GetMapping("/account-info/{userId}")
   public AccountResponseDTO getAccountsById(@PathVariable String userId) {
     return accountService.getAccountById(userId);
   }
