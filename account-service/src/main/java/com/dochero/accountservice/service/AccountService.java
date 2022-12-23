@@ -151,4 +151,10 @@ public class AccountService {
     findAccountById(id);
     accountRepository.deleteById(id);
   }
+
+  public List<String> getUserDepartmentIDs(String userId) {
+     List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(userId);
+     return accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(Collectors.toList());
+  }
+
 }

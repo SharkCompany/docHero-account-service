@@ -69,6 +69,18 @@ public class AccountController {
     return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
   }
 
+  @Operation(summary = "Get List Departments Of Account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Successfully",
+          content = {@Content(mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
+          }),
+  })
+  @GetMapping("/account/{accountId}/departments")
+  public ResponseEntity<List<String>> getAccountDepartments(@PathVariable String accountId) {
+    return new ResponseEntity<>(accountService.getUserDepartmentIDs(accountId), HttpStatus.OK);
+  }
+
   @Operation(summary = "Get Account By Password And Email")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successfully",
