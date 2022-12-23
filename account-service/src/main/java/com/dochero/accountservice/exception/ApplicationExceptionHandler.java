@@ -26,6 +26,18 @@ public class ApplicationExceptionHandler {
     return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
   }
 
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ExceptionHandler({
+      ServiceCallingException.class})
+  public ResponseEntity<Object> handleServiceCallingException(ServiceCallingException exception) {
+    var responseBody = ErrorResponseSchema.builder()
+        .timestamp(LocalDateTime.now())
+        .messages(exception.getMessage())
+        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        .build();
+    return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   @ExceptionHandler({
       AccountNotFoundException.class})
   @ResponseStatus(HttpStatus.NOT_FOUND)

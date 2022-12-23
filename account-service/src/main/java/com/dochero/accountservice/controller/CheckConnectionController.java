@@ -1,5 +1,7 @@
 package com.dochero.accountservice.controller;
 
+import com.dochero.accountservice.exception.ServiceCallingException;
+import com.dochero.accountservice.exception.ValidationException;
 import com.dochero.accountservice.openfeign.DepartmentServiceFeignClient;
 import com.dochero.accountservice.openfeign.dto.reponse.DepartmentBaseResponseDTO;
 import com.dochero.accountservice.service.dto.department.DepartmentDTO;
@@ -26,6 +28,12 @@ public class CheckConnectionController {
   @Operation(summary = "Ping To Department Service From Account Service")
   @GetMapping("/ping-to-department-service")
   public DepartmentBaseResponseDTO<List<DepartmentDTO>> department() {
-    return departmentServiceFeignClient.getAllDepartment();
+
+    try {
+      var response = departmentServiceFeignClient.getAllDepartment();
+      return response;
+    } catch(Exception ex) {
+        throw new ServiceCallingException(ex.toString());
+    }
   }
 }
