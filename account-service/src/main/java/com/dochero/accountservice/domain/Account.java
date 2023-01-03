@@ -41,5 +41,8 @@ public class Account {
     @Column(name="description")
     private String description;
 
+    @Column(name="isDeleted")
+    private boolean isDeleted;
+
 
 }
