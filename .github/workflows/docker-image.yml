@@ -55,4 +55,4 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        script: cd /home/novapo/docker-compose-list/dochero/;git pull;docker stop dochero-account-service;docker rm dochero-account-service; docker pull phongvanngo/dochero-account-service; docker-compose up -d account-service; 
+        script: cd /home/novapo/docker-compose-list/dochero/;git pull;docker stop dochero-account-service;docker rm dochero-account-service; docker pull phongvanngo/dochero-account-service; docker-compose up -f account-service.docker-compose.yml -d account-service; 
