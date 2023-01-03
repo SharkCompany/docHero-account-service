@@ -26,7 +26,7 @@ public class Account {
     @Column(name="email",unique=true)
     private String email;
 
-    @Column(name="fullname")
+    @Column(name="full_name")
     private String fullname;
 
     @Column(name="password")
@@ -34,5 +34,12 @@ public class Account {
 
     @Column(name="role_name")
     private String roleName;
+
+    @Column(name="title")
+    private String title;
+
+    @Column(name="description")
+    private String description;
+
 
 }

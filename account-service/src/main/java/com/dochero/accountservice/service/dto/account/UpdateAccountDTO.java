@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateAccountDTO {
 
   private String fullName;
-  private List<String> departmentId;
+  private List<String> departmentIDs;
 
   @RoleConstraint
   private String roleName;

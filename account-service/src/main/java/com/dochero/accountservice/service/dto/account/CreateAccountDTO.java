@@ -19,6 +19,10 @@ public class CreateAccountDTO {
   @NotEmptyString(message = ValidationErrorMessage.EMPTY_FULLNAME)
   private String fullName;
 
+  private String title;
+
+  private String description;
+
   @NotEmptyString(message = ValidationErrorMessage.EMPTY_PASSWORD)
   private String password;
 

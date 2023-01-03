@@ -49,8 +49,6 @@ public class AccountService {
     List<AccountDepartment> accountDepartments = new ArrayList<>();
     Account newAccount = accountRepository.save(accountToCreate);
 
-    accountDepartmentRepository.saveAll(accountDepartments);
-
     for (String departmentID : departmentIDs) {
       try {
         var res = departmentServiceFeignClient.getById(departmentID);
@@ -99,12 +97,15 @@ public class AccountService {
     List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
     for (Account account : accounts
     ) {
+      List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
+          account.getId());
       accountResponseDTOS.add(
           AccountResponseDTO
               .builder()
               .id(account.getId())
               .fullName(account.getFullname())
-//              .departmentIDs(account.getDepartmentIDs())
+              .departmentIDs(accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(
+                  Collectors.toList()))
               .email(account.getEmail())
               .roleName(account.getRoleName())
               .build());
@@ -144,8 +145,23 @@ public class AccountService {
   public AccountResponseDTO updateAccount(String id, UpdateAccountDTO accountDTO) {
     Account account = findAccountById(id);
 
-    if (!Objects.isNull(accountDTO.getDepartmentId())) {
+    if (!Objects.isNull(accountDTO.getDepartmentIDs())) {
 //      account.setDepartmentIDs(accountDTO.getDepartmentId());
+      accountDepartmentRepository.deleteAllByUserId(id);
+      List<AccountDepartment> accountDepartments = new ArrayList<>();
+      for (String departmentID : accountDTO.getDepartmentIDs()) {
+        try {
+          var res = departmentServiceFeignClient.getById(departmentID);
+          if (Objects.nonNull(res.getData())) {
+            accountDepartments.add(new AccountDepartment(id, departmentID));
+          }
+        } catch (Exception ex) {
+          throw new DepartmentNotFoundException(
+              String.format("Department with id = %s is not found. Error: %s", departmentID,
+                  ex));
+        }
+      }
+      accountDepartmentRepository.saveAll(accountDepartments);
     }
 
     if (!Objects.isNull(accountDTO.getFullName())) {
@@ -156,12 +172,15 @@ public class AccountService {
       account.setRoleName(accountDTO.getRoleName());
     }
 
+
+
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())
 //        .departmentIDs(account.getDepartmentIDs())
         .fullName(account.getFullname())
         .email(account.getEmail())
+        .departmentIDs(accountDTO.getDepartmentIDs())
         .roleName(account.getRoleName())
         .build();
   }

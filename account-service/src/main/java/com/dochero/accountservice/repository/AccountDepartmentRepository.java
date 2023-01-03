@@ -9,4 +9,5 @@ public interface AccountDepartmentRepository extends
     JpaRepository<AccountDepartment, AccountDepartmentId> {
 
   List<AccountDepartment> findAccountDepartmentByUserId(String userId);
+  void deleteAllByUserId(String userId);
 }
