@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -22,6 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @Builder
 @IdClass(AccountDepartmentId.class)
+@ToString
 public class AccountDepartment implements Serializable {
 
     @Id

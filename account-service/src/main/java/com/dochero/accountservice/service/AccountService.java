@@ -2,6 +2,7 @@ package com.dochero.accountservice.service;
 
 import com.dochero.accountservice.domain.Account;
 import com.dochero.accountservice.domain.AccountDepartment;
+import com.dochero.accountservice.domain.compositeid.AccountDepartmentId;
 import com.dochero.accountservice.exception.AccountNotFoundException;
 import com.dochero.accountservice.exception.DepartmentNotFoundException;
 import com.dochero.accountservice.exception.WrongPasswordException;
@@ -13,6 +14,7 @@ import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
 import com.dochero.accountservice.service.dto.account.ValidateAccountDTO;
+import com.dochero.accountservice.service.dto.department.DepartmentDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -72,7 +74,25 @@ public class AccountService {
         .email(newAccount.getEmail()).build();
   }
 
+  private void deleteDepartmentsFromAccount(String userId) {
+    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(userId);
+    List<AccountDepartmentId> accountDepartmentIdsToDelete = new ArrayList<>();
+    for (AccountDepartment accountDepartment:accountDepartments) {
+      try {
+        var res = departmentServiceFeignClient.getById(accountDepartment.getDepartmentId());
+      }
+       catch(Exception ex) {
+         System.out.println(ex);
+         System.out.println(accountDepartment);
+         AccountDepartmentId accountDepartmentId = new AccountDepartmentId(accountDepartment.getUserId(),accountDepartment.getDepartmentId());
+         accountDepartmentIdsToDelete.add(accountDepartmentId);
+      }
+    }
+    accountDepartmentRepository.deleteAllById(accountDepartmentIdsToDelete);
+  }
+
   public AccountResponseDTO getAccountById(String userId) {
+    deleteDepartmentsFromAccount(userId);
     Optional<Account> accountOptional = accountRepository.findById(userId);
     if (accountOptional.isEmpty()) {
       throw new AccountNotFoundException();
@@ -97,6 +117,7 @@ public class AccountService {
     List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
     for (Account account : accounts
     ) {
+      deleteDepartmentsFromAccount(account.getId());
       List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
           account.getId());
       accountResponseDTOS.add(
