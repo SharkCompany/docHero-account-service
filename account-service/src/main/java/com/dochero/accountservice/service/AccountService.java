@@ -93,7 +93,7 @@ public class AccountService {
   }
 
   public List<AccountResponseDTO> getAccounts() {
-    List<Account> accounts = accountRepository.findAll();
+    List<Account> accounts = accountRepository.findAllByDeletedOrderByEmail(false);
     List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
     for (Account account : accounts
     ) {
@@ -186,9 +186,8 @@ public class AccountService {
   }
 
   public void deleteAccount(String id) {
-    Account account = findAccountById(id);
-    account.setDeleted(true);
-    accountRepository.save(account);
+//    Account account = findAccountById(id);
+    accountRepository.deleteById(id);
   }
 
   public List<String> getUserDepartmentIDs(String userId) {

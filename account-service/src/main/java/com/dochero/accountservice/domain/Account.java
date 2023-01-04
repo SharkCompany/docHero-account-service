@@ -10,9 +10,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name="accounts")
+@SQLDelete(sql = "UPDATE accounts SET deleted = true WHERE id=?")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,8 +43,8 @@ public class Account {
     @Column(name="description")
     private String description;
 
-    @Column(name="isDeleted")
-    private boolean deleted;
+    @Column(name="deleted")
+    private boolean deleted = Boolean.FALSE;
 
 
 }
