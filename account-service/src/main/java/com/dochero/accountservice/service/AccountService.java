@@ -93,7 +93,7 @@ public class AccountService {
   }
 
   public List<AccountResponseDTO> getAccounts() {
-    List<Account> accounts = accountRepository.findAllByIsDeletedFalseOrderByEmail();
+    List<Account> accounts = accountRepository.findAll();
     List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
     for (Account account : accounts
     ) {

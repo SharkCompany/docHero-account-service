@@ -42,7 +42,7 @@ public class Account {
     private String description;
 
     @Column(name="isDeleted")
-    private boolean isDeleted;
+    private boolean deleted;
 
 
 }

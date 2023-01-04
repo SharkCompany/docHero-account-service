@@ -13,5 +13,5 @@ public interface AccountRepository extends JpaRepository<Account,Long>, MyReposi
   public Optional<Account> findByEmailAndPassword(String email, String password);
   public void deleteById(String id);
 
-  public List<Account> findAllByIsDeletedFalseOrderByEmail();
+  public List<Account> findAllByDeletedOrderByEmail(boolean deleted);
 }
