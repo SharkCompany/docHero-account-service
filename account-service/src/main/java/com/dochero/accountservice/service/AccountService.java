@@ -10,11 +10,12 @@ import com.dochero.accountservice.openfeign.DepartmentServiceFeignClient;
 import com.dochero.accountservice.repository.AccountDepartmentRepository;
 import com.dochero.accountservice.repository.AccountRepository;
 import com.dochero.accountservice.service.dto.account.AccountResponseDTO;
+import com.dochero.accountservice.service.dto.account.ChangePasswordRequestDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
+import com.dochero.accountservice.service.dto.account.UpdateProfileRequestDTO;
 import com.dochero.accountservice.service.dto.account.ValidateAccountDTO;
-import com.dochero.accountservice.service.dto.department.DepartmentDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -75,17 +76,18 @@ public class AccountService {
   }
 
   private void deleteDepartmentsFromAccount(String userId) {
-    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(userId);
+    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
+        userId);
     List<AccountDepartmentId> accountDepartmentIdsToDelete = new ArrayList<>();
-    for (AccountDepartment accountDepartment:accountDepartments) {
+    for (AccountDepartment accountDepartment : accountDepartments) {
       try {
         var res = departmentServiceFeignClient.getById(accountDepartment.getDepartmentId());
-      }
-       catch(Exception ex) {
-         System.out.println(ex);
-         System.out.println(accountDepartment);
-         AccountDepartmentId accountDepartmentId = new AccountDepartmentId(accountDepartment.getUserId(),accountDepartment.getDepartmentId());
-         accountDepartmentIdsToDelete.add(accountDepartmentId);
+      } catch (Exception ex) {
+        System.out.println(ex);
+        System.out.println(accountDepartment);
+        AccountDepartmentId accountDepartmentId = new AccountDepartmentId(
+            accountDepartment.getUserId(), accountDepartment.getDepartmentId());
+        accountDepartmentIdsToDelete.add(accountDepartmentId);
       }
     }
     accountDepartmentRepository.deleteAllById(accountDepartmentIdsToDelete);
@@ -125,8 +127,9 @@ public class AccountService {
               .builder()
               .id(account.getId())
               .fullName(account.getFullname())
-              .departmentIDs(accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(
-                  Collectors.toList()))
+              .departmentIDs(
+                  accountDepartments.stream().map(AccountDepartment::getDepartmentId).collect(
+                      Collectors.toList()))
               .email(account.getEmail())
               .roleName(account.getRoleName())
               .build());
@@ -163,6 +166,64 @@ public class AccountService {
     return account.get();
   }
 
+  public AccountResponseDTO updateProfile(String id, UpdateProfileRequestDTO accountDTO) {
+    Account account = findAccountById(id);
+
+    if (!Objects.isNull(accountDTO.getFullName())) {
+      account.setFullname(accountDTO.getFullName());
+    }
+
+    if (!Objects.isNull(accountDTO.getTitle())) {
+      account.setTitle(accountDTO.getTitle());
+    }
+
+    if (!Objects.isNull(accountDTO.getAbout())) {
+      account.setAbout(accountDTO.getAbout());
+    }
+    if (!Objects.isNull(accountDTO.getDescription())) {
+      account.setDescription(accountDTO.getDescription());
+    }
+    if (!Objects.isNull(accountDTO.getAvatar())) {
+      account.setAvatar(accountDTO.getAvatar());
+    }
+    if (!Objects.isNull(accountDTO.getCoverPhoto())) {
+      account.setCoverPhoto(accountDTO.getCoverPhoto());
+    }
+    if (!Objects.isNull(accountDTO.getLocation())) {
+      account.setLocation(accountDTO.getLocation());
+    }
+
+    account = accountRepository.save(account);
+
+    return AccountResponseDTO.builder().id(account.getId())
+        .fullName(account.getFullname())
+        .email(account.getEmail())
+        .roleName(account.getRoleName())
+        .title(account.getTitle())
+        .description(account.getDescription())
+        .coverPhoto(account.getCoverPhoto())
+        .avatar(account.getAvatar())
+        .location(account.getLocation())
+        .about(account.getAbout())
+        .build();
+  }
+
+  public String changePassword(String userId,ChangePasswordRequestDTO changePasswordRequestDTO) {
+    Optional<Account> accountOpt = accountRepository.findById(userId);
+
+    if (accountOpt.isEmpty()) throw new AccountNotFoundException();
+
+    if (!passwordEncoder.matches(changePasswordRequestDTO.getOldPassword(), accountOpt.get().getPassword())) {
+      throw new WrongPasswordException();
+    }
+
+    accountOpt.get().setPassword(passwordEncoder.encode(changePasswordRequestDTO.getNewPassword()));
+
+    accountRepository.save(accountOpt.get());
+
+    return "successfully";
+  }
+
   public AccountResponseDTO updateAccount(String id, UpdateAccountDTO accountDTO) {
     Account account = findAccountById(id);
 
@@ -193,8 +254,6 @@ public class AccountService {
       account.setRoleName(accountDTO.getRoleName());
     }
 
-
-
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())
@@ -205,6 +264,7 @@ public class AccountService {
         .roleName(account.getRoleName())
         .build();
   }
+
 
   public void deleteAccount(String id) {
 //    Account account = findAccountById(id);

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class AccountDepartmentId implements Serializable {
   private String userId;
   private String departmentId;
+
 }

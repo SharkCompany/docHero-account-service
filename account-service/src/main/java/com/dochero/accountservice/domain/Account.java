@@ -1,5 +1,6 @@
 package com.dochero.accountservice.domain;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +46,22 @@ public class Account {
 
     @Column(name="deleted")
     private boolean deleted = Boolean.FALSE;
+
+    @Column(name="avatar")
+    private String avatar;
+
+    @Column(name="coverPhoto")
+    private String coverPhoto;
+
+    @Column(name="about")
+    private String about;
+
+    @Column(name="location")
+    private String location;
+
+    @Column(name="createdAt")
+    private LocalDateTime createdAt;
+
 
 
 }

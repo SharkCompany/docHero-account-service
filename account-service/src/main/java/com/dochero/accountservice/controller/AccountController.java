@@ -3,9 +3,11 @@ package com.dochero.accountservice.controller;
 import com.dochero.accountservice.exception.ValidationException;
 import com.dochero.accountservice.service.AccountService;
 import com.dochero.accountservice.service.dto.account.AccountResponseDTO;
+import com.dochero.accountservice.service.dto.account.ChangePasswordRequestDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
+import com.dochero.accountservice.service.dto.account.UpdateProfileRequestDTO;
 import com.dochero.accountservice.service.dto.account.ValidateAccountDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -118,6 +120,28 @@ public class AccountController {
       throw new ValidationException(errors);
     }
     return new ResponseEntity<>(accountService.updateAccount(id, updateAccountDTO), HttpStatus.OK);
+  }
+
+  @PutMapping("/profile/{id}")
+  public ResponseEntity<AccountResponseDTO> updateProfile(
+      @RequestBody @Valid UpdateProfileRequestDTO updateProfileRequestDTO,
+      @PathVariable String id,
+      BindingResult errors) {
+    if (errors.hasErrors()) {
+      throw new ValidationException(errors);
+    }
+    return new ResponseEntity<>(accountService.updateProfile(id, updateProfileRequestDTO), HttpStatus.OK);
+  }
+
+  @PutMapping("/change-password/{id}")
+  public ResponseEntity<String> changePassword(
+      @RequestBody @Valid ChangePasswordRequestDTO changePasswordRequestDTO,
+      @PathVariable String id,
+      BindingResult errors) {
+    if (errors.hasErrors()) {
+      throw new ValidationException(errors);
+    }
+    return new ResponseEntity<>(accountService.changePassword(id, changePasswordRequestDTO), HttpStatus.OK);
   }
 
 
