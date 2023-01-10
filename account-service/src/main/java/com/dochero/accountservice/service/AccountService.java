@@ -154,9 +154,14 @@ public class AccountService {
         .builder()
         .id(account.getId())
         .fullName(account.getFullname())
-//        .departmentIDs(account.getDepartmentIDs())
         .email(account.getEmail())
         .roleName(account.getRoleName())
+        .about(account.getAbout())
+        .avatar(account.getAvatar())
+        .coverPhoto(account.getCoverPhoto())
+        .description(account.getDescription())
+        .title(account.getTitle())
+        .location(account.getLocation())
         .build();
   }
 
