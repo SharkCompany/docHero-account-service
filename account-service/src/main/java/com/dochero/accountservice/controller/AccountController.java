@@ -1,7 +1,9 @@
 package com.dochero.accountservice.controller;
 
+import com.dochero.accountservice.domain.FileHistory;
 import com.dochero.accountservice.exception.ValidationException;
 import com.dochero.accountservice.service.AccountService;
+import com.dochero.accountservice.service.FileHistoryService;
 import com.dochero.accountservice.service.dto.account.AccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.ChangePasswordRequestDTO;
 import com.dochero.accountservice.service.dto.account.CreateAccountDTO;
@@ -9,6 +11,7 @@ import com.dochero.accountservice.service.dto.account.CreateAccountResponseDTO;
 import com.dochero.accountservice.service.dto.account.UpdateAccountDTO;
 import com.dochero.accountservice.service.dto.account.UpdateProfileRequestDTO;
 import com.dochero.accountservice.service.dto.account.ValidateAccountDTO;
+import com.dochero.accountservice.service.dto.document.FileHistoryUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
   final AccountService accountService;
+
+  final FileHistoryService fileHistoryService;
 
   @GetMapping("/ping")
   public String helloWorld() {
@@ -150,5 +155,16 @@ public class AccountController {
       @PathVariable String id) {
     accountService.deleteAccount(id);
     return new ResponseEntity<>("Delete Successfully", HttpStatus.OK);
+  }
+
+  @GetMapping("/account/{id}/file-history")
+  public ResponseEntity<?> getFileHistory(@PathVariable("id") String userId) {
+    return new ResponseEntity<>(fileHistoryService.getAllFileHistoryByUserId(userId), HttpStatus.OK);
+  }
+
+  @PutMapping("/account/{id}/file-history")
+  public ResponseEntity<?> updateFileHistory(@PathVariable("id") String userId,
+                                             @RequestBody @Valid FileHistoryUpdateRequest request) {
+    return new ResponseEntity<>(fileHistoryService.updateFileHistory(userId, request.getDocumentId()), HttpStatus.OK);
   }
 }
