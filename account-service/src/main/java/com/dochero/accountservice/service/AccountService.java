@@ -75,26 +75,11 @@ public class AccountService {
         .email(newAccount.getEmail()).build();
   }
 
-  private void deleteDepartmentsFromAccount(String userId) {
-    List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
-        userId);
-    List<AccountDepartmentId> accountDepartmentIdsToDelete = new ArrayList<>();
-    for (AccountDepartment accountDepartment : accountDepartments) {
-      try {
-        var res = departmentServiceFeignClient.getById(accountDepartment.getDepartmentId());
-      } catch (Exception ex) {
-        System.out.println(ex);
-        System.out.println(accountDepartment);
-        AccountDepartmentId accountDepartmentId = new AccountDepartmentId(
-            accountDepartment.getUserId(), accountDepartment.getDepartmentId());
-        accountDepartmentIdsToDelete.add(accountDepartmentId);
-      }
-    }
-    accountDepartmentRepository.deleteAllById(accountDepartmentIdsToDelete);
+  public void deleteDepartmentsFromAccount(String departmentId) {
+    accountDepartmentRepository.deleteAllByDepartmentId(departmentId);
   }
 
   public AccountResponseDTO getAccountById(String userId) {
-    deleteDepartmentsFromAccount(userId);
     Optional<Account> accountOptional = accountRepository.findById(userId);
     if (accountOptional.isEmpty()) {
       throw new AccountNotFoundException();
@@ -117,9 +102,7 @@ public class AccountService {
   public List<AccountResponseDTO> getAccounts() {
     List<Account> accounts = accountRepository.findAllByDeletedOrderByEmail(false);
     List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
-    for (Account account : accounts
-    ) {
-      deleteDepartmentsFromAccount(account.getId());
+    for (Account account : accounts) {
       List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAccountDepartmentByUserId(
           account.getId());
       accountResponseDTOS.add(
@@ -139,8 +122,7 @@ public class AccountService {
 
   public AccountResponseDTO getAccountByEmailAndPassword(ValidateAccountDTO validateAccountDTO) {
     Optional<Account> accountOptional = accountRepository.findByEmail(
-        validateAccountDTO.getEmail()
-    );
+        validateAccountDTO.getEmail());
     accountOptional.orElseThrow(AccountNotFoundException::new);
 
     String hashedPassword = accountOptional.get().getPassword();
@@ -213,10 +195,11 @@ public class AccountService {
         .build();
   }
 
-  public String changePassword(String userId,ChangePasswordRequestDTO changePasswordRequestDTO) {
+  public String changePassword(String userId, ChangePasswordRequestDTO changePasswordRequestDTO) {
     Optional<Account> accountOpt = accountRepository.findById(userId);
 
-    if (accountOpt.isEmpty()) throw new AccountNotFoundException();
+    if (accountOpt.isEmpty())
+      throw new AccountNotFoundException();
 
     if (!passwordEncoder.matches(changePasswordRequestDTO.getOldPassword(), accountOpt.get().getPassword())) {
       throw new WrongPasswordException();
@@ -233,7 +216,7 @@ public class AccountService {
     Account account = findAccountById(id);
 
     if (!Objects.isNull(accountDTO.getDepartmentIDs())) {
-//      account.setDepartmentIDs(accountDTO.getDepartmentId());
+      // account.setDepartmentIDs(accountDTO.getDepartmentId());
       accountDepartmentRepository.deleteAllByUserId(id);
       List<AccountDepartment> accountDepartments = new ArrayList<>();
       for (String departmentID : accountDTO.getDepartmentIDs()) {
@@ -262,7 +245,7 @@ public class AccountService {
     account = accountRepository.save(account);
 
     return AccountResponseDTO.builder().id(account.getId())
-//        .departmentIDs(account.getDepartmentIDs())
+        // .departmentIDs(account.getDepartmentIDs())
         .fullName(account.getFullname())
         .email(account.getEmail())
         .departmentIDs(accountDTO.getDepartmentIDs())
@@ -270,9 +253,8 @@ public class AccountService {
         .build();
   }
 
-
   public void deleteAccount(String id) {
-//    Account account = findAccountById(id);
+    // Account account = findAccountById(id);
     accountRepository.deleteById(id);
   }
 

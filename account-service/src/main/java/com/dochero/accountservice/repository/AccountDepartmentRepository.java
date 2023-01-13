@@ -10,4 +10,5 @@ public interface AccountDepartmentRepository extends
 
   List<AccountDepartment> findAccountDepartmentByUserId(String userId);
   void deleteAllByUserId(String userId);
+  void deleteAllByDepartmentId(String departmentId);
 }

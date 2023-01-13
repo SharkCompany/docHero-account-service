@@ -49,10 +49,9 @@ public class AccountController {
 
   @Operation(summary = "Create Account")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AccountResponseDTO.class))
-          }),
+      @ApiResponse(responseCode = "200", description = "Successfully", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = AccountResponseDTO.class))
+      }),
   })
   @PostMapping("/account/create")
   public ResponseEntity<CreateAccountResponseDTO> register(
@@ -66,16 +65,14 @@ public class AccountController {
 
   @Operation(summary = "Get List of Accounts")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully",
-          content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
-          }),
+      @ApiResponse(responseCode = "200", description = "Successfully", content = {
+          @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
+      }),
   })
   @GetMapping("/accounts")
   public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
     return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
   }
-
 
   @GetMapping("/account-info/{userId}")
   public AccountResponseDTO getAccountsById(@PathVariable String userId) {
@@ -84,10 +81,9 @@ public class AccountController {
 
   @Operation(summary = "Get List Departments Of Account")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully",
-          content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
-          }),
+      @ApiResponse(responseCode = "200", description = "Successfully", content = {
+          @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class)))
+      }),
   })
   @GetMapping("/account/{accountId}/departments")
   public ResponseEntity<List<String>> getAccountDepartments(@PathVariable String accountId) {
@@ -96,19 +92,16 @@ public class AccountController {
 
   @Operation(summary = "Get Account By Password And Email")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AccountResponseDTO.class))}),
-      @ApiResponse(responseCode = "404", description = "Account Not Found",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = Object.class))
-          }),
+      @ApiResponse(responseCode = "200", description = "Successfully", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = AccountResponseDTO.class)) }),
+      @ApiResponse(responseCode = "404", description = "Account Not Found", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = Object.class))
+      }),
   })
   @PostMapping("/validate")
   public ResponseEntity<AccountResponseDTO> findAccountByEmailAndPassword(
       @Valid @RequestBody ValidateAccountDTO accountAuthPayload,
-      BindingResult errors
-  ) {
+      BindingResult errors) {
     if (errors.hasErrors()) {
       throw new ValidationException(errors);
     }
@@ -149,7 +142,6 @@ public class AccountController {
     return new ResponseEntity<>(accountService.changePassword(id, changePasswordRequestDTO), HttpStatus.OK);
   }
 
-
   @DeleteMapping("/account/{id}")
   public ResponseEntity<String> deleteAccount(
       @PathVariable String id) {
@@ -164,7 +156,13 @@ public class AccountController {
 
   @PutMapping("/account/{id}/file-history")
   public ResponseEntity<?> updateFileHistory(@PathVariable("id") String userId,
-                                             @RequestBody @Valid FileHistoryUpdateRequest request) {
+      @RequestBody @Valid FileHistoryUpdateRequest request) {
     return new ResponseEntity<>(fileHistoryService.updateFileHistory(userId, request.getDocumentId()), HttpStatus.OK);
   }
+
+  @PostMapping("/account/remove-department-from-account/{id}")
+  public void removeDepartmentFromAccount(@PathVariable("id") String departmentId) {
+    accountService.deleteDepartmentsFromAccount(departmentId);
+  }
+
 }
