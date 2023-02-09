@@ -7,9 +7,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://103.142.137.207:12345/docHero-account-db
-    password: "123456"
-    username: root
+    url: jdbc:postgresql://103.48.192.223:54322/dochero-account
+    password: "ksharkinc2022"
+    username: ksharkinc
   output:
     ansi:
       enabled: always
